@@ -1,14 +1,12 @@
 from openpyxl import Workbook, load_workbook
 
-wb = load_workbook(filename = 'data3.xlsx')
+wb = load_workbook(filename = 'data.xlsx')
 
 outputWb = Workbook()
 
 startColumn = 3
 
 sheetNames = wb.sheetnames
-columnsOnSheet = [4, 4, 8, 13, 6, 6]
-
 
 
 for sheet in sheetNames:
@@ -24,7 +22,7 @@ for sheet in sheetNames:
     if (rowId == None): #Если инн пустой
       break
     
-    for columnOffset in range(0, columnsOnSheet[sheetId]):
+    for columnOffset in range(0, 20):
       column = startColumn + columnOffset
       cellValue = workSheet.cell(column=column, row=lastRow).value
       if (cellValue == None): # если ячейка пустая
@@ -43,33 +41,29 @@ for sheet in sheetNames:
             else:
               data[secondRowId] = {
                 'name': rowName,
-                'columns': [
-                  {
+                'columns': [{
                     'offset': column,
                     'value': secondCellValue
-                  }
-               ]
+                  }]
               }
           rowOffset += 1
       else:
         if rowId in data.keys():
           data[rowId]['columns'].append(
-            {
+              {
                 'offset': column,
                 'value': cellValue
               }
-              )
+            )
         else:
           data[rowId] = {
             'name': rowName,
-            'columns': [
-            {
+            'columns': [{
                 'offset': column,
                 'value': cellValue
               }]
           }
     lastRow += 1
-  print(data)
 
   rowNumber = 1
   outputSheet = outputWb.create_sheet(title=sheet)
